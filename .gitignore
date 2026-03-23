@@ -30,6 +30,7 @@ build/
 # ======================
 .supabase/
 .supabase/functions/.env
+supabase/.temp/
 
 # ======================
 # Python / ML (if backend exists)
