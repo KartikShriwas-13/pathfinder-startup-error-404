@@ -236,7 +236,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, LogOut, BookOpen, Sparkles } from "lucide-react";
+import { Loader2, LogOut, BookOpen, Sparkles, Users } from "lucide-react";
 import { ValidationResults } from "@/components/dashboard/ValidationResults";
 
 const Dashboard = () => {
@@ -303,7 +303,6 @@ const Dashboard = () => {
     setIsLoading(true);
 
     try {
-      // ✅ IMPORTANT FIX: get session token
       const {
         data: { session },
       } = await supabase.auth.getSession();
@@ -315,7 +314,7 @@ const Dashboard = () => {
       const { data, error } = await supabase.functions.invoke("validate-idea", {
         body: { idea, location, budget: parseFloat(budget) },
         headers: {
-          Authorization: `Bearer ${session.access_token}`, // ✅ FIX
+          Authorization: `Bearer ${session.access_token}`,
         },
       });
 
@@ -349,19 +348,32 @@ const Dashboard = () => {
     }
   };
 
+  // ✅ FIX: Update history click to auto-fill location and budget
+  const handleHistoryClick = (item: any) => {
+    setValidationResult(item.validation_result);
+    setLocation(item.location);
+    setIdea(item.idea_text);
+    setBudget(item.budget.toString());
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gradient">Startup Launchpad</h1>
-          <div className="flex gap-4 items-center">
+          <h1 className="text-2xl font-bold text-gradient hidden md:block">Startup Launchpad</h1>
+          <div className="flex gap-2 sm:gap-4 items-center">
+            <Button variant="default" className="bg-primary" onClick={() => navigate("/mentorship")}>
+              <Users className="mr-2 h-4 w-4" />
+              <span className="hidden sm:inline">Expert Guidance</span>
+              <span className="sm:hidden">Experts</span>
+            </Button>
             <Button variant="outline" onClick={() => navigate("/courses")}>
               <BookOpen className="mr-2 h-4 w-4" />
-              Courses
+              <span className="hidden sm:inline">Courses</span>
             </Button>
             <Button variant="ghost" onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />
-              Logout
+              <span className="hidden sm:inline">Logout</span>
             </Button>
           </div>
         </div>
@@ -436,7 +448,7 @@ const Dashboard = () => {
                   <Card
                     key={item.id}
                     className="cursor-pointer hover:border-primary/50 transition-colors bg-secondary/50"
-                    onClick={() => setValidationResult(item.validation_result)}
+                    onClick={() => handleHistoryClick(item)}
                   >
                     <CardHeader>
                       <CardTitle className="text-lg line-clamp-2">{item.idea_text}</CardTitle>
@@ -467,7 +479,8 @@ const Dashboard = () => {
             </div>
           )}
 
-          {validationResult && <ValidationResults result={validationResult} />}
+          {/* ✅ Passed location down to ValidationResults for Dynamic Suppliers */}
+          {validationResult && <ValidationResults result={validationResult} location={location} />}
         </div>
       </main>
     </div>

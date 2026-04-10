@@ -41,7 +41,7 @@ const Courses = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card">
+      {/* <header className="border-b border-border bg-card">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <Button variant="ghost" onClick={() => navigate("/dashboard")}>
@@ -50,6 +50,20 @@ const Courses = () => {
             </Button>
             <h1 className="text-2xl font-bold text-gradient">Training Courses</h1>
           </div>
+        </div>
+      </header> */}
+      <header className="border-b border-border bg-card">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <Button variant="ghost" onClick={() => navigate("/dashboard")}>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
+            </Button>
+            <h1 className="text-2xl font-bold text-gradient hidden sm:block">Training Courses</h1>
+          </div>
+          <Button onClick={() => navigate("/mentorship")} className="bg-accent hover:bg-accent/90 text-accent-foreground">
+            Get Expert Guidance
+          </Button>
         </div>
       </header>
 
