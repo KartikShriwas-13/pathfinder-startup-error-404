@@ -11,7 +11,7 @@ import emailjs from '@emailjs/browser';
 import keoleImg from '../images/Prof_R_R_Keole.jpg';
 import gangwaniImg from '../images/vinod_gangwani.jpg';
 import utaneImg from '../images/S_N_Utane.jpg';
-import pattewarImg from '../images/P_C_Pattewar.jpg';
+import pattewarImg from '../images/p.jpg.jpeg';
 
 // 🎓 IT DEPARTMENT FACULTY MENTORS
 const experts = [
@@ -116,10 +116,10 @@ const Mentorship = () => {
     // Simulate payment gateway processing time
     await new Promise(resolve => setTimeout(resolve, 2000));
 
-    // 📧 EMAILJS CONFIGURATION
-    const SERVICE_ID = "service_noxnmzh"; 
-    const TEMPLATE_ID = "template_q2rcvfu"; 
-    const PUBLIC_KEY = "TTjfpzLfhC-lKpMqt"; 
+    // 📧 EMAILJS CONFIGURATION (Securely pulled from .env)
+    const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID; 
+    const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID; 
+    const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY; 
 
     // Format today's date professionally
     const currentDate = new Date().toLocaleDateString('en-IN', {
@@ -127,7 +127,6 @@ const Mentorship = () => {
     });
 
     try {
-      // ✅ FIX: Removed the restrictive 'if' statement so the email always fires!
       await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
         expert_name: selectedExpert.name,
         expert_email: selectedExpert.email, 
